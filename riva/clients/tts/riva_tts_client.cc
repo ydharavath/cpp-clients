@@ -55,6 +55,9 @@ DEFINE_string(
     "Input audio prompt file for Zero Shot Model. Audio length should be between 3-10 seconds.");
 DEFINE_int32(zero_shot_quality, 20, "Required quality of output audio, ranges between 1-40.");
 DEFINE_string(custom_dictionary, "", " User dictionary containing graph-to-phone custom words");
+DEFINE_bool(
+    word_time_offsets, false,
+    "If true, request per-word start/end timestamps (returned in response metadata).");
 DEFINE_string(zero_shot_transcript, "", "Transcript corresponding to Zero shot audio prompt.");
 DEFINE_uint64(timeout_ms, 10000, "Timeout for GRPC channel creation");
 DEFINE_uint64(max_grpc_message_size, MAX_GRPC_MESSAGE_SIZE, "Max GRPC message size");
@@ -239,6 +242,7 @@ main(int argc, char** argv)
 
   request.set_sample_rate_hz(rate);
   request.set_voice_name(FLAGS_voice_name);
+  request.set_enable_word_time_offsets(FLAGS_word_time_offsets);
   if (not FLAGS_zero_shot_audio_prompt.empty()) {
     auto zero_shot_data = request.mutable_zero_shot_data();
     std::vector<std::shared_ptr<WaveData>> audio_prompt;
@@ -301,6 +305,12 @@ main(int argc, char** argv)
 
     auto audio = response.audio();
     LOG(INFO) << "Got " << audio.length() << " bytes back from server" << std::endl;
+    if (FLAGS_word_time_offsets) {
+      for (const auto& word : response.meta().words()) {
+        LOG(INFO) << "word: \"" << word.word() << "\" start: " << word.start_time()
+                  << " ms end: " << word.end_time() << " ms" << std::endl;
+      }
+    }
     // Write to WAV file
     if (FLAGS_audio_encoding.empty() || FLAGS_audio_encoding == "pcm") {
       ::riva::utils::wav::Write(
