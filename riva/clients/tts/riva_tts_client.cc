@@ -363,6 +363,13 @@ main(int argc, char** argv)
         std::copy(opus_data, opus_data + len, std::back_inserter(opus_buffer));
         audio_len += len;
       }
+      // Word timestamps arrive in the final chunk's metadata.
+      if (FLAGS_word_time_offsets) {
+        for (const auto& word : chunk.meta().words()) {
+          LOG(INFO) << "word: \"" << word.word() << "\" start: " << word.start_time()
+                    << " ms end: " << word.end_time() << " ms" << std::endl;
+        }
+      }
     }
     grpc::Status rpc_status = reader->Finish();
     auto end = std::chrono::steady_clock::now();
