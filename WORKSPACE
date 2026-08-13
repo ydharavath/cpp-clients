@@ -76,10 +76,8 @@ grpc_extra_deps()
 
 git_repository(
     name = "nvriva_common",
-    # Fork of nvidia-riva/common@71df982 (current upstream main) plus the TTS
-    # word-timestamp proto fields (enable_word_time_offsets / WordTiming).
-    remote = "https://github.com/ydharavath/common.git",
-    commit = "560795e"
+    remote = "https://github.com/nvidia-riva/common.git",
+    commit = "268890b7286031a6d4950e34f7ce13ed0d4ce621"
 )
 
 http_archive(

@@ -417,6 +417,7 @@ main(int argc, char** argv)
   str_usage << "           --zero_shot_transcript=<text>" << std::endl;
   str_usage << "           --custom_dictionary=<filename> " << std::endl;
   str_usage << "           --custom_configuration=<key:value,key:value,...> " << std::endl;
+  str_usage << "           --word_time_offsets=<true|false> " << std::endl;
   gflags::SetUsageMessage(str_usage.str());
   gflags::SetVersionString(::riva::utils::kBuildScmRevision);
 

@@ -156,6 +156,7 @@ main(int argc, char** argv)
   str_usage << "           --timeout_ms=<timeout_ms> " << std::endl;
   str_usage << "           --max_grpc_message_size=<max_grpc_message_size> " << std::endl;
   str_usage << "           --custom_configuration=<key:value,key:value,...> " << std::endl;
+  str_usage << "           --word_time_offsets=<true|false> " << std::endl;
   gflags::SetUsageMessage(str_usage.str());
   gflags::SetVersionString(::riva::utils::kBuildScmRevision);
 
